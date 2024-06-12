@@ -6,7 +6,7 @@ import { CatchAsync } from "../../../Utills/CatchAsync"
 
 
 const signUpUser = CatchAsync(async(req:Request, res:Response)=>{
-    const result = await UserServices.CreateUserInToDb(req.body)
+  const result = await UserServices.CreateUserInToDb(req.body)
     SendRespons(res, {
         success: true,
         statusCode: httpStatus.OK,
