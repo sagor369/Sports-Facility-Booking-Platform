@@ -4,5 +4,5 @@ export type TSendData<T> = {
     statusCode: number 
     success: boolean
     data: T
-    token?: string
+    accessToken?: string
 }

@@ -2,13 +2,13 @@ import { TSendData } from "./utils.interface"
 import { Response } from "express"
 
 export const SendRespons = <T>(res:Response, data:TSendData<T>) =>{
-   const {message, statusCode, success, token} = data
-   if(token){
+   const {message, statusCode, success, accessToken} = data
+   if(accessToken){
 
        res.status(statusCode).json({
            success,
            message,
-           token,
+           accessToken,
            data: data?.data
        })
    }else {

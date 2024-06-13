@@ -14,7 +14,7 @@ const CreateUserInToDb = async (payload: TUser) => {
 
 const LoginUserInToDb = async (payload: TLogin) => {
   const { email, password } = payload;
-  const isUser = await User.findOne({ email }).select("password");
+  const isUser = await User.findOne({ email }).select("+password");
   if (!isUser) {
     throw new AppError(httpStatus.NOT_FOUND, " user not found");
   }
@@ -30,14 +30,18 @@ const LoginUserInToDb = async (payload: TLogin) => {
     role: isUser?.role,
     email: isUser?.email,
   };
-  const token = jwt.sign(jwtHeader, config.jwt_secrate as string, {
+  console.log(jwtHeader)
+  const accessToken = jwt.sign(jwtHeader, config.jwt_secrate as string, {
     expiresIn: "2d",
   });
-  console.log(token);
+  const refreshToken  = jwt.sign(jwtHeader, config.jwt_secrate as string, {
+    expiresIn: "7d",
+  });
   const UserData = await User.findOne({ email }).select("-password");
   const result = {
     UserData,
-    token,
+    accessToken,
+    refreshToken
   };
   return result;
 };

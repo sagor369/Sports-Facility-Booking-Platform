@@ -4,15 +4,23 @@ import { TFaculty } from "./Faculty.interface";
 import { Faculty } from "./Faculty.model";
 
 const createFacultyInToDb = async(payload: TFaculty) =>{
+
+    const isExistsFaculty = await Faculty.findOne({name: payload?.name})
+    if(isExistsFaculty){
+        throw new AppError(httpStatus.FORBIDDEN, `${payload.name} Faculty already exists`)
+    }
     const result =await Faculty.create(payload)
     return result
 }
 const getFacultyInToDb = async() =>{
-    const result =await Faculty.find().sort("-createdAt")
+    const result =await Faculty.find({isDelete:false}).sort("-createdAt")
     return result
 }
 const getSingleFacultyInToDb = async(id: string) =>{
     const result = await Faculty.findById(id)
+    if(result?.isDelete === true){
+        return "this data is deleted"
+    }
     return result
 }
 const updateFacultyInToDb = async(id: string, payload: Partial<TFaculty>) =>{

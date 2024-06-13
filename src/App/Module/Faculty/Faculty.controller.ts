@@ -32,9 +32,31 @@ const getSingleFaculty = CatchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
+const updateFaculty = CatchAsync(async (req: Request, res: Response) => {
+    const {id} = req.params
+  const result = await FacultyServices.updateFacultyInToDb(id, req.body);
+  SendRespons(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "create course is successfuly ",
+    data: result,
+  });
+});
+const deleteFaculty = CatchAsync(async (req: Request, res: Response) => {
+    const {id} = req.params
+  const result = await FacultyServices.deleteFacultyInToDb(id);
+  SendRespons(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "create course is successfuly ",
+    data: result,
+  });
+});
 
 export const FacultyController = {
   postFaculty,
   getFaculty,
-  getSingleFaculty
+  getSingleFaculty,
+  updateFaculty,
+  deleteFaculty
 };

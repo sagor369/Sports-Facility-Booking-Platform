@@ -5,6 +5,7 @@ const FacultySchema = new Schema<TFaculty>({
   name: {
     type: String,
     required: true,
+    unique: true
   },
   description: {
     type: String,
