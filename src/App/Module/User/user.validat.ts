@@ -17,3 +17,15 @@ export const ValidateUser = z.object({
     password: z.string(),
   }),
 });
+
+export const  LoginUserValidation = z.object({
+  data:z.object({
+    email: z
+      .string({
+        required_error: "email is required ",
+        invalid_type_error: "email is invalid",
+      })
+      .email(),
+      password: z.string()
+  })
+})

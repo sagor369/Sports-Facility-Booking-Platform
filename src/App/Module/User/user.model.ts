@@ -2,6 +2,7 @@ import { model, Schema } from "mongoose";
 import { TUser } from "./user.interface";
 import bcrypt from "bcrypt"
 import config from "../../../config";
+import { UserRole } from "./user.const";
 
 const UserSchema = new Schema<TUser>({
   name: {
@@ -19,6 +20,7 @@ const UserSchema = new Schema<TUser>({
     type: String,
     required: true, 
     trim: true,
+    select: 0
     
   },
   phoneNumber: {
@@ -32,8 +34,14 @@ const UserSchema = new Schema<TUser>({
     required: true,
   },
   role:{
-    type:String,
-    default: "user"
+    type: String,
+    required: true,
+    enum: Object.values(UserRole),
+    default: "User"
+  },
+  isDelete:{
+    type:Boolean,
+    default: false
   }
 });
 
@@ -43,9 +51,9 @@ UserSchema.pre("save", async function (next) {
   next();
 });
 
-UserSchema.post("save", async function (doc, next) {
-  doc.password = "";
-  next();
-});
+// UserSchema.post("save", async function (doc, next) {
+//   doc.password = "";
+//   next();
+// });
 
  export const User = model<TUser>("user", UserSchema)

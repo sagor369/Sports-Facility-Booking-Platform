@@ -14,7 +14,19 @@ const signUpUser = CatchAsync(async(req:Request, res:Response)=>{
         data: result,
       })
   })
+const LoginUser = CatchAsync(async(req:Request, res:Response)=>{
+  const result = await UserServices.LoginUserInToDb(req.body)
+  const {token, UserData} = result
+  SendRespons(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: "create course is successfuly ",
+        token,
+        data: UserData,
+      })
+  })
 
   export const UserController = {
-    signUpUser
+    signUpUser,
+    LoginUser
   }
