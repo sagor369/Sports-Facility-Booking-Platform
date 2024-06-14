@@ -9,4 +9,5 @@ export type TBooking = {
     faculty: Types.ObjectId
     payableAmount: number
     isBooked: keyof typeof BookingStatus
+    isDelete: boolean
 }

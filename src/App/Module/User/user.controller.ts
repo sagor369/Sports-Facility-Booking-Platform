@@ -10,7 +10,7 @@ const signUpUser = CatchAsync(async(req:Request, res:Response)=>{
     SendRespons(res, {
         success: true,
         statusCode: httpStatus.OK,
-        message: "create course is successfuly ",
+        message: "User registered successfully ",
         data: result,
       })
   })
@@ -25,7 +25,7 @@ const LoginUser = CatchAsync(async(req:Request, res:Response)=>{
   SendRespons(res, {
         success: true,
         statusCode: httpStatus.OK,
-        message: "create course is successfuly ",
+        message: "User logged in successfully",
         accessToken,
         data: UserData,
       })

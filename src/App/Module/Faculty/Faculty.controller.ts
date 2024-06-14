@@ -28,7 +28,7 @@ const getSingleFaculty = CatchAsync(async (req: Request, res: Response) => {
   SendRespons(res, {
     success: true,
     statusCode: httpStatus.OK,
-    message: "create course is successfuly ",
+    message: "Facilities retrieved successfully ",
     data: result,
   });
 });
@@ -38,7 +38,7 @@ const updateFaculty = CatchAsync(async (req: Request, res: Response) => {
   SendRespons(res, {
     success: true,
     statusCode: httpStatus.OK,
-    message: "create course is successfuly ",
+    message: "Facilities update successfully ",
     data: result,
   });
 });
@@ -48,7 +48,7 @@ const deleteFaculty = CatchAsync(async (req: Request, res: Response) => {
   SendRespons(res, {
     success: true,
     statusCode: httpStatus.OK,
-    message: "create course is successfuly ",
+    message: "Facilities delete successfully ",
     data: result,
   });
 });

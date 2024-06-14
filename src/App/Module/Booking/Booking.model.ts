@@ -34,6 +34,10 @@ const BookingSchema = new Schema<TBooking>({
     enum: Object.values(BookingStatus),
     default: "confirmed",
   },
+  isDelete:{
+    type: Boolean,
+    default: false
+  }
 });
 
 export const Booking = model("booking", BookingSchema)
