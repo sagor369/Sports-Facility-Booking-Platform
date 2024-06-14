@@ -1,10 +1,10 @@
 import httpStatus from "http-status";
-import { AppError } from "../../../middelware/Errors/CustomError";
 import { TLogin, TUser } from "./user.interface";
 import { User } from "./user.model";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import config from "../../../config";
+import { AppError } from "../../middelware/Errors/CustomError";
 
 const CreateUserInToDb = async (payload: TUser) => {
   const NewUser = await User.create(payload);

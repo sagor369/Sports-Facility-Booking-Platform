@@ -1,16 +1,17 @@
 import { Router } from "express";
 import { FacultyController } from "./Faculty.controller";
-import { ValidateRequest } from "../../../middelware/ValidationRequist";
 import { FacultyValidate, updateFacultyValidate } from "./Faculty.validate";
+import { ValidateRequest } from "../../middelware/ValidationRequist";
+import { Authorizetion } from "../../middelware/auth/Auth";
 
 
 const router = Router()
 
-router.post("/",ValidateRequest(FacultyValidate), FacultyController.postFaculty)
+router.post("/",ValidateRequest(FacultyValidate),Authorizetion("admin"), FacultyController.postFaculty)
 router.get("/", FacultyController.getFaculty)
 router.get("/:id", FacultyController.getSingleFaculty)
-router.put("/:id",ValidateRequest(updateFacultyValidate), FacultyController.updateFaculty)
-router.delete("/:id", FacultyController.deleteFaculty)
+router.put("/:id",ValidateRequest(updateFacultyValidate),Authorizetion("admin"), FacultyController.updateFaculty)
+router.delete("/:id",Authorizetion("admin"), FacultyController.deleteFaculty)
 
 
 

@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { UserController } from "./user.controller";
-import { ValidateRequest } from "../../../middelware/ValidationRequist";
 import { LoginUserValidation, ValidateUser } from "./user.validat";
+import { ValidateRequest } from "../../middelware/ValidationRequist";
 
 
 const router = Router()

@@ -1,7 +1,7 @@
 import httpStatus from "http-status";
-import { AppError } from "../../../middelware/Errors/CustomError";
 import { TFaculty } from "./Faculty.interface";
 import { Faculty } from "./Faculty.model";
+import { AppError } from "../../middelware/Errors/CustomError";
 
 const createFacultyInToDb = async(payload: TFaculty) =>{
 

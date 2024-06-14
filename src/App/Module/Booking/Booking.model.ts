@@ -21,10 +21,12 @@ const BookingSchema = new Schema<TBooking>({
   },
   faculty: {
     type: Schema.Types.ObjectId,
+    ref: "faculty",
     required: true,
   },
   user: {
     type: Schema.Types.ObjectId,
+    ref: "user",
     required: true,
   },
   isBooked: {

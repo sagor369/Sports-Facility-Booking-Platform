@@ -6,3 +6,8 @@ export type TSendData<T> = {
     data: T
     accessToken?: string
 }
+
+export type TToken ={
+    email: string
+    role: string
+}
