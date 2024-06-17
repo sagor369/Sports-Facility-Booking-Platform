@@ -8,7 +8,7 @@ import { AppError } from "../../middelware/Errors/CustomError";
 
 const CreateUserInToDb = async (payload: TUser) => {
   const NewUser = await User.create(payload);
-  const result = await User.findById(NewUser?._id).select("-password");
+  const result = await User.findById(NewUser?._id);
   return result;
 };
 
