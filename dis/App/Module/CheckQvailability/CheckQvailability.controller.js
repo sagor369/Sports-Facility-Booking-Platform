@@ -12,34 +12,21 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const mongoose_1 = __importDefault(require("mongoose"));
-const app_1 = __importDefault(require("./app"));
-const config_1 = __importDefault(require("./config"));
-let server;
-function main() {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            yield mongoose_1.default.connect(config_1.default.database_url);
-            server = app_1.default.listen(config_1.default.port, () => {
-                console.log(`Example app listening on port ${config_1.default.port}`);
-            });
-        }
-        catch (err) {
-            console.log(err);
-        }
+exports.CheckDataController = void 0;
+const CatchAsync_1 = require("../../../Utills/CatchAsync");
+const SendRespons_1 = require("../../../Utills/SendRespons");
+const http_status_1 = __importDefault(require("http-status"));
+const CheckQvailability_services_1 = require("./CheckQvailability.services");
+const gatCheckQuery = (0, CatchAsync_1.CatchAsync)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { date } = req.query;
+    const result = yield CheckQvailability_services_1.CheckData.gatCheckQvailabilityInToDb(date);
+    (0, SendRespons_1.SendRespons)(res, {
+        success: true,
+        statusCode: http_status_1.default.OK,
+        message: "Facilities delete successfully ",
+        data: result,
     });
-}
-process.on("unhandledRejection", () => {
-    console.log("server is close");
-    if (server) {
-        server.close(() => {
-            process.exit(1);
-        });
-    }
-    process.exit(1);
-});
-process.on("uncaughtException", () => {
-    console.log("server is colse now");
-    process.exit(1);
-});
-main();
+}));
+exports.CheckDataController = {
+    gatCheckQuery
+};

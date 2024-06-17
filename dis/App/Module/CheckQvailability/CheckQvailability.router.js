@@ -1,0 +1,10 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.CheckDataRouter = void 0;
+const express_1 = require("express");
+const CheckQvailability_controller_1 = require("./CheckQvailability.controller");
+const ValidationRequist_1 = require("../../middelware/ValidationRequist");
+const checkAcailavility_validate_1 = require("./checkAcailavility.validate");
+const router = (0, express_1.Router)();
+router.get("/", (0, ValidationRequist_1.ValidateRequest)(checkAcailavility_validate_1.ValidateDate), CheckQvailability_controller_1.CheckDataController.gatCheckQuery);
+exports.CheckDataRouter = router;

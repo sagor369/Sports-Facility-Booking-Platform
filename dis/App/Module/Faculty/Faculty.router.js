@@ -1,0 +1,15 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.FacultyRouter = void 0;
+const express_1 = require("express");
+const Faculty_controller_1 = require("./Faculty.controller");
+const Faculty_validate_1 = require("./Faculty.validate");
+const ValidationRequist_1 = require("../../middelware/ValidationRequist");
+const Auth_1 = require("../../middelware/auth/Auth");
+const router = (0, express_1.Router)();
+router.post("/", (0, ValidationRequist_1.ValidateRequest)(Faculty_validate_1.FacultyValidate), (0, Auth_1.Authorizetion)("admin"), Faculty_controller_1.FacultyController.postFaculty);
+router.get("/", Faculty_controller_1.FacultyController.getFaculty);
+router.get("/:id", Faculty_controller_1.FacultyController.getSingleFaculty);
+router.put("/:id", (0, ValidationRequist_1.ValidateRequest)(Faculty_validate_1.updateFacultyValidate), (0, Auth_1.Authorizetion)("admin"), Faculty_controller_1.FacultyController.updateFaculty);
+router.delete("/:id", (0, Auth_1.Authorizetion)("admin"), Faculty_controller_1.FacultyController.deleteFaculty);
+exports.FacultyRouter = router;
