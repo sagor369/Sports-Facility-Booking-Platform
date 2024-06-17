@@ -11,7 +11,7 @@ const gatCheckQuery = CatchAsync(async (req: Request, res: Response) => {
   SendRespons(res, {
     success: true,
     statusCode: httpStatus.OK,
-    message: "Facilities delete successfully ",
+    message: "Availability checked successfully",
     data: result,
   });
 });
