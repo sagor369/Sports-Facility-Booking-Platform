@@ -23,7 +23,7 @@ const gatCheckQuery = (0, CatchAsync_1.CatchAsync)((req, res) => __awaiter(void 
     (0, SendRespons_1.SendRespons)(res, {
         success: true,
         statusCode: http_status_1.default.OK,
-        message: "Facilities delete successfully ",
+        message: "Availability checked successfully",
         data: result,
     });
 }));

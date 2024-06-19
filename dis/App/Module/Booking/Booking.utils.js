@@ -13,13 +13,15 @@ exports.TimeCheck = void 0;
 const Booking_model_1 = require("./Booking.model");
 const TimeCheck = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const payloadDate = payload.date;
-    const bookingData = yield Booking_model_1.Booking.findOne({ faculty: payload.faculty, date: payloadDate });
-    const newStartTime = `2024-02-12T${payload === null || payload === void 0 ? void 0 : payload.startTime}`;
-    const newEndTime = `2024-02-12T${payload === null || payload === void 0 ? void 0 : payload.endTime}`;
-    const oldStartTime = `2024-02-12T${bookingData === null || bookingData === void 0 ? void 0 : bookingData.startTime}`;
-    const oldEndTime = `2024-02-12T${bookingData === null || bookingData === void 0 ? void 0 : bookingData.endTime}`;
-    if (newStartTime < oldEndTime && newEndTime > oldStartTime) {
-        return true;
+    const bookingData = yield Booking_model_1.Booking.find({ faculty: payload.faculty, date: payloadDate });
+    for (const booking of bookingData) {
+        const newStartTime = `2024-02-12T${payload === null || payload === void 0 ? void 0 : payload.startTime}`;
+        const newEndTime = `2024-02-12T${payload === null || payload === void 0 ? void 0 : payload.endTime}`;
+        const existingStartTime = `2024-02-12T${booking === null || booking === void 0 ? void 0 : booking.startTime}`;
+        const existingEndTime = `2024-02-12T${booking === null || booking === void 0 ? void 0 : booking.endTime}`;
+        if (newStartTime < existingEndTime && newEndTime > existingStartTime) {
+            return true;
+        }
     }
     return false;
 });

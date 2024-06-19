@@ -3,15 +3,9 @@ import { SendRespons } from "../../../Utills/SendRespons";
 import httpStatus from "http-status";
 import { CatchAsync } from "../../../Utills/CatchAsync";
 import { BookingServices } from "./Booking.services";
-import jwt from "jsonwebtoken";
-import config from "../../../config";
 
 const createBooking = CatchAsync(async (req: Request, res: Response) => {
-  const accessToken = req.headers.authorization;
-  const result = await BookingServices.createBookingInToDb(
-    req.body,
-    accessToken as string
-  );
+  const result = await BookingServices.createBookingInToDb(req.body, req.user);
   SendRespons(res, {
     success: true,
     statusCode: httpStatus.OK,
@@ -29,8 +23,7 @@ const getBooking = CatchAsync(async (req: Request, res: Response) => {
   });
 });
 const getUserBooking = CatchAsync(async (req: Request, res: Response) => {
-  const accessToken = req.headers.authorization;
-  const result = await BookingServices.gatUserBookingInToDb(accessToken as string);
+  const result = await BookingServices.gatUserBookingInToDb(req?.user);
   SendRespons(res, {
     success: true,
     statusCode: httpStatus.OK,
@@ -39,9 +32,11 @@ const getUserBooking = CatchAsync(async (req: Request, res: Response) => {
   });
 });
 const deleteUserBooking = CatchAsync(async (req: Request, res: Response) => {
-  const accessToken = req.headers.authorization;
-  const {id} = req.params
-  const result = await BookingServices.deleteUserBooking(id, accessToken as string);
+  const { id } = req.params;
+  const result = await BookingServices.deleteUserBooking(
+    id,
+    req.user
+  );
   SendRespons(res, {
     success: true,
     statusCode: httpStatus.OK,
@@ -54,6 +49,5 @@ export const BookingController = {
   createBooking,
   getBooking,
   getUserBooking,
-  deleteUserBooking
-
+  deleteUserBooking,
 };

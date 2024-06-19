@@ -41,13 +41,12 @@ const LoginUserInToDb = (payload) => __awaiter(void 0, void 0, void 0, function*
         role: isUser === null || isUser === void 0 ? void 0 : isUser.role,
         email: isUser === null || isUser === void 0 ? void 0 : isUser.email,
     };
-    console.log(jwtHeader);
-    const accessToken = jsonwebtoken_1.default.sign(jwtHeader, config_1.default.jwt_secrate, {
+    const accessToken = `Bearer ${jsonwebtoken_1.default.sign(jwtHeader, config_1.default.jwt_secrate, {
         expiresIn: "2d",
-    });
-    const refreshToken = jsonwebtoken_1.default.sign(jwtHeader, config_1.default.jwt_secrate, {
-        expiresIn: "7d",
-    });
+    })}`;
+    const refreshToken = `Bearer ${jsonwebtoken_1.default.sign(jwtHeader, config_1.default.jwt_refresh, {
+        expiresIn: "30d",
+    })}`;
     const UserData = yield user_model_1.User.findOne({ email }).select("-password");
     const result = {
         UserData,

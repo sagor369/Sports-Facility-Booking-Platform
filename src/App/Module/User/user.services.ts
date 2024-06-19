@@ -30,13 +30,12 @@ const LoginUserInToDb = async (payload: TLogin) => {
     role: isUser?.role,
     email: isUser?.email,
   };
-  console.log(jwtHeader)
-  const accessToken = jwt.sign(jwtHeader, config.jwt_secrate as string, {
+  const accessToken = `Bearer ${jwt.sign(jwtHeader, config.jwt_secrate as string, {
     expiresIn: "2d",
-  });
-  const refreshToken  = jwt.sign(jwtHeader, config.jwt_secrate as string, {
-    expiresIn: "7d",
-  });
+  })}`;
+  const refreshToken  = `Bearer ${jwt.sign(jwtHeader, config.jwt_refresh as string, {
+    expiresIn: "30d",
+  })}`;
   const UserData = await User.findOne({ email }).select("-password");
   const result = {
     UserData,

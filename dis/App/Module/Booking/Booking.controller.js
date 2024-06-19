@@ -18,8 +18,7 @@ const http_status_1 = __importDefault(require("http-status"));
 const CatchAsync_1 = require("../../../Utills/CatchAsync");
 const Booking_services_1 = require("./Booking.services");
 const createBooking = (0, CatchAsync_1.CatchAsync)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const accessToken = req.headers.authorization;
-    const result = yield Booking_services_1.BookingServices.createBookingInToDb(req.body, accessToken);
+    const result = yield Booking_services_1.BookingServices.createBookingInToDb(req.body, req.user);
     (0, SendRespons_1.SendRespons)(res, {
         success: true,
         statusCode: http_status_1.default.OK,
@@ -37,8 +36,7 @@ const getBooking = (0, CatchAsync_1.CatchAsync)((req, res) => __awaiter(void 0, 
     });
 }));
 const getUserBooking = (0, CatchAsync_1.CatchAsync)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const accessToken = req.headers.authorization;
-    const result = yield Booking_services_1.BookingServices.gatUserBookingInToDb(accessToken);
+    const result = yield Booking_services_1.BookingServices.gatUserBookingInToDb(req === null || req === void 0 ? void 0 : req.user);
     (0, SendRespons_1.SendRespons)(res, {
         success: true,
         statusCode: http_status_1.default.OK,
@@ -47,9 +45,8 @@ const getUserBooking = (0, CatchAsync_1.CatchAsync)((req, res) => __awaiter(void
     });
 }));
 const deleteUserBooking = (0, CatchAsync_1.CatchAsync)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const accessToken = req.headers.authorization;
     const { id } = req.params;
-    const result = yield Booking_services_1.BookingServices.deleteUserBooking(id, accessToken);
+    const result = yield Booking_services_1.BookingServices.deleteUserBooking(id, req.user);
     (0, SendRespons_1.SendRespons)(res, {
         success: true,
         statusCode: http_status_1.default.OK,
@@ -61,5 +58,5 @@ exports.BookingController = {
     createBooking,
     getBooking,
     getUserBooking,
-    deleteUserBooking
+    deleteUserBooking,
 };

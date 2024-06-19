@@ -1,14 +1,13 @@
 import httpStatus from "http-status";
 import { Faculty } from "../Faculty/Faculty.model";
 import { TBooking } from "./Booking.interface";
-import jwt, { JwtPayload } from "jsonwebtoken";
-import config from "../../../config";
+import { JwtPayload } from "jsonwebtoken";
 import { User } from "../User/user.model";
 import { AppError } from "../../middelware/Errors/CustomError";
 import { Booking } from "./Booking.model";
 import { TimeCheck } from "./Booking.utils";
 
-const createBookingInToDb = async (payload: TBooking, token: string) => {
+const createBookingInToDb = async (payload: TBooking, users: JwtPayload) => {
   const facultys = await Faculty.findById(payload.faculty);
   if (!facultys) {
     throw new AppError(httpStatus.NOT_FOUND, "Faculty is not found");
@@ -18,10 +17,9 @@ const createBookingInToDb = async (payload: TBooking, token: string) => {
     throw new AppError(httpStatus.NOT_FOUND, "this schedule in not available");
   }
 
-  const tokenDecoded = jwt.verify(token, config.jwt_secrate as string);
-  const { email } = tokenDecoded as JwtPayload;
-  const users = await User.findOne({ email });
-  if (!users) {
+  const email  =users.email
+  const singleuser = await User.findOne({ email });
+  if (!singleuser) {
     throw new AppError(httpStatus.NOT_FOUND, "user is not found");
   }
 
@@ -31,7 +29,7 @@ const createBookingInToDb = async (payload: TBooking, token: string) => {
   const endtminite = endHour * 60 + endMin;
   const totalTime = (endtminite - startminite) / 60;
   payload.payableAmount = totalTime * facultys?.pricePerHour;
-  payload.user = users._id;
+  payload.user = singleuser._id;
   const result = await Booking.create(payload);
   return result;
 };
@@ -40,9 +38,8 @@ const gatBookintInToDB = async () => {
   return result;
 };
 
-const gatUserBookingInToDb = async (token: string) => {
-  const tokenDecoded = jwt.verify(token, config.jwt_secrate as string);
-  const { email } = tokenDecoded as JwtPayload;
+const gatUserBookingInToDb = async (payload: JwtPayload) => {
+  const  email  = payload.email
   const user = await User.findOne({ email }).select("_id");
   if (!user) {
     throw new AppError(httpStatus.NOT_FOUND, "user is not found");
@@ -57,9 +54,8 @@ const gatUserBookingInToDb = async (token: string) => {
   return result;
 };
 
-const deleteUserBooking = async (id: string, token: string) => {
-  const tokenDecoded = jwt.verify(token, config.jwt_secrate as string);
-  const { email } = tokenDecoded as JwtPayload;
+const deleteUserBooking = async (id: string, users:JwtPayload) => {
+  const { email } = users
   const user = await User.findOne({ email });
   if (!user) {
     throw new AppError(httpStatus.NOT_FOUND, "user is not found");
@@ -76,7 +72,7 @@ const deleteUserBooking = async (id: string, token: string) => {
   }
   const result = await Booking.findByIdAndUpdate(
     id,
-    { isDelete: true },
+    { isDelete: true, isBooked:"canceled" },
     { new: true }
   );
   return result;

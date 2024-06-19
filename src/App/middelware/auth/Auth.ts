@@ -8,20 +8,22 @@ import { CatchAsync } from "../../../Utills/CatchAsync";
 
 export const Authorizetion = (userRole: string) => {
   return CatchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    const accessToken = req.headers.authorization;
-    if (!accessToken) {
+    const token = req.headers.authorization;
+    if (!token) {
       throw new AppError(
         httpStatus.UNAUTHORIZED,
         "You are not authorized to access this route1"
       );
     }
+    const accessToken = token?.split(" ") as string[]
     const decodedToken = jwt.verify(
-      accessToken as string,
+      accessToken[1] as string,
       config.jwt_secrate as string
     ) as JwtPayload;
 
     const { email, role } = decodedToken;
     await TokenCheck({ email, role }, userRole);
+    req.user= decodedToken
     next();
   });
 };

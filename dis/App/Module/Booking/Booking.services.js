@@ -15,13 +15,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.BookingServices = void 0;
 const http_status_1 = __importDefault(require("http-status"));
 const Faculty_model_1 = require("../Faculty/Faculty.model");
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const config_1 = __importDefault(require("../../../config"));
 const user_model_1 = require("../User/user.model");
 const CustomError_1 = require("../../middelware/Errors/CustomError");
 const Booking_model_1 = require("./Booking.model");
 const Booking_utils_1 = require("./Booking.utils");
-const createBookingInToDb = (payload, token) => __awaiter(void 0, void 0, void 0, function* () {
+const createBookingInToDb = (payload, users) => __awaiter(void 0, void 0, void 0, function* () {
     const facultys = yield Faculty_model_1.Faculty.findById(payload.faculty);
     if (!facultys) {
         throw new CustomError_1.AppError(http_status_1.default.NOT_FOUND, "Faculty is not found");
@@ -30,10 +28,9 @@ const createBookingInToDb = (payload, token) => __awaiter(void 0, void 0, void 0
     if (time) {
         throw new CustomError_1.AppError(http_status_1.default.NOT_FOUND, "this schedule in not available");
     }
-    const tokenDecoded = jsonwebtoken_1.default.verify(token, config_1.default.jwt_secrate);
-    const { email } = tokenDecoded;
-    const users = yield user_model_1.User.findOne({ email });
-    if (!users) {
+    const email = users.email;
+    const singleuser = yield user_model_1.User.findOne({ email });
+    if (!singleuser) {
         throw new CustomError_1.AppError(http_status_1.default.NOT_FOUND, "user is not found");
     }
     const [startHour, startMin] = payload.startTime.split(":").map(Number);
@@ -42,7 +39,7 @@ const createBookingInToDb = (payload, token) => __awaiter(void 0, void 0, void 0
     const endtminite = endHour * 60 + endMin;
     const totalTime = (endtminite - startminite) / 60;
     payload.payableAmount = totalTime * (facultys === null || facultys === void 0 ? void 0 : facultys.pricePerHour);
-    payload.user = users._id;
+    payload.user = singleuser._id;
     const result = yield Booking_model_1.Booking.create(payload);
     return result;
 });
@@ -50,9 +47,8 @@ const gatBookintInToDB = () => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield Booking_model_1.Booking.find().populate("faculty").populate("user");
     return result;
 });
-const gatUserBookingInToDb = (token) => __awaiter(void 0, void 0, void 0, function* () {
-    const tokenDecoded = jsonwebtoken_1.default.verify(token, config_1.default.jwt_secrate);
-    const { email } = tokenDecoded;
+const gatUserBookingInToDb = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+    const email = payload.email;
     const user = yield user_model_1.User.findOne({ email }).select("_id");
     if (!user) {
         throw new CustomError_1.AppError(http_status_1.default.NOT_FOUND, "user is not found");
@@ -66,9 +62,8 @@ const gatUserBookingInToDb = (token) => __awaiter(void 0, void 0, void 0, functi
     }
     return result;
 });
-const deleteUserBooking = (id, token) => __awaiter(void 0, void 0, void 0, function* () {
-    const tokenDecoded = jsonwebtoken_1.default.verify(token, config_1.default.jwt_secrate);
-    const { email } = tokenDecoded;
+const deleteUserBooking = (id, users) => __awaiter(void 0, void 0, void 0, function* () {
+    const { email } = users;
     const user = yield user_model_1.User.findOne({ email });
     if (!user) {
         throw new CustomError_1.AppError(http_status_1.default.NOT_FOUND, "user is not found");
@@ -80,7 +75,7 @@ const deleteUserBooking = (id, token) => __awaiter(void 0, void 0, void 0, funct
     if (checkBooking.isDelete) {
         throw new CustomError_1.AppError(http_status_1.default.NOT_FOUND, "this booking is all ready delete");
     }
-    const result = yield Booking_model_1.Booking.findByIdAndUpdate(id, { isDelete: true }, { new: true });
+    const result = yield Booking_model_1.Booking.findByIdAndUpdate(id, { isDelete: true, isBooked: "canceled" }, { new: true });
     return result;
 });
 exports.BookingServices = {
