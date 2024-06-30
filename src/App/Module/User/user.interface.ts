@@ -5,7 +5,7 @@ export type TUser = {
   name: string;
   email: string;
   password: string;
-  phoneNumber: string;
+  phone: string;
   role: keyof typeof UserRole;
   address: string;
   isDelete: boolean

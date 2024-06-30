@@ -13,7 +13,7 @@ exports.ValidateUser = zod_1.z.object({
             invalid_type_error: "email is invalid",
         })
             .email(),
-        phoneNumber: zod_1.z.string().max(14).min(9),
+        phone: zod_1.z.string(),
         role: zod_1.z.string(),
         address: zod_1.z.string(),
         password: zod_1.z.string(),

@@ -23,7 +23,7 @@ const UserSchema = new Schema<TUser>({
     select: 0
     
   },
-  phoneNumber: {
+  phone: {
     type: String,
     required: true,
     unique: true,

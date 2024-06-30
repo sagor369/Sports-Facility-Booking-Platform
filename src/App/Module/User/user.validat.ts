@@ -11,7 +11,7 @@ export const ValidateUser = z.object({
         invalid_type_error: "email is invalid",
       })
       .email(),
-    phoneNumber: z.string().max(14).min(9),
+    phone: z.string(),
     role: z.string(),
     address: z.string(),
     password: z.string(),
